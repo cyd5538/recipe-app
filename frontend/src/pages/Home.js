@@ -18,6 +18,7 @@ const Home = () => {
     <HomeStyle>
       <Search />
       <Recipe title="비 오는 날 먹기 좋은 음식" rcpname="전"/>
+
       {/* <Recipe title="면치기 하고 싶을 떄 ?" rcpname="면"/>
       <Recipe title="아플 때" rcpname="죽"/> */}
     </HomeStyle>
