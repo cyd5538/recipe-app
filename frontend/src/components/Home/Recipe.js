@@ -3,6 +3,7 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import Spinner from '../../style/Spinner'
 
 const RecipeStyle = styled.div`
   margin-top: 50px;
@@ -17,8 +18,6 @@ const RecipeStyle = styled.div`
   }
 
   .item img {
-    width: 100%;
-    height: 50%;
     border-radius: 2rem;
     pointer-events: none;
     position: relative;
@@ -32,7 +31,7 @@ const RecipeStyle = styled.div`
     cursor: grab;
     overflow: hidden;
     background-color: #fff;
-    height: 350px;
+    height: 430px;
     border-radius: 2rem;
   }
 
@@ -42,17 +41,19 @@ const RecipeStyle = styled.div`
   }
 `;
 
-const Recipe = ({ rcpname, title }) => {
+const Recipe = ({ rcpname, title, ImgWidth, ImgHeight, MinWidth }) => {
   const [datas, setDatas] = useState([]);
+  const [dataget, setDataget] = useState(false);
   const [width, setWidth] = useState(0);
   const carousel = useRef();
 
   // cosr 막히면 https://cors-anywhere.herokuapp.com/ 추가
   const getData = async () => {
     const response = await axios.get(
-      `http://openapi.foodsafetykorea.go.kr/api/${process.env.REACT_APP_SERVICE_KEY}/COOKRCP01/json/1/10/RCP_NM=${rcpname}`
+      `/${process.env.REACT_APP_SERVICE_KEY}/COOKRCP01/json/1/10/RCP_NM=${rcpname}`
     );
     setDatas(response.data.COOKRCP01.row);
+    setDataget(true)
     console.log(datas);
   };
   useEffect(() => {
@@ -62,7 +63,7 @@ const Recipe = ({ rcpname, title }) => {
 
   return (
     <RecipeStyle>
-      <h2>{title}</h2>
+      {dataget ? <h2>{title}</h2>: <Spinner />}
       <motion.div
         ref={carousel}
         className="carousel"
@@ -75,12 +76,20 @@ const Recipe = ({ rcpname, title }) => {
         >
           {datas?.map((data) => {
             return (
-              <motion.a className="item" key={data.RCP_SEQ}>
+              <motion.div
+                className="item"
+                style={{ minWidth: `${MinWidth}` }}
+                key={data.RCP_SEQ}
+              >
+                <img
+                  src={data.ATT_FILE_NO_MAIN}
+                  alt={data.RCP_NM}
+                  style={{ width: `${ImgWidth}`, height: `${ImgHeight}` }}
+                />
                 <Link to={`/${data.RCP_NM}`}>
-                  <img src={data.ATT_FILE_NO_MAIN} alt={data.RCP_NM} />
                   <div className="center">{data.RCP_NM}</div>
                 </Link>
-              </motion.a>
+              </motion.div>
             );
           })}
         </motion.div>
