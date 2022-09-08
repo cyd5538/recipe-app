@@ -16,7 +16,7 @@ const NavStyle = styled.div`
 
   h1 {
     color: black;
-    font-size: 1.3rem;
+    font-size: 2rem;
   }
   .form {
     display: flex;
@@ -29,7 +29,7 @@ const NavStyle = styled.div`
     align-items: center;
     justify-content: center;
     gap: 1.3rem;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: bold;
     div{
         a{
