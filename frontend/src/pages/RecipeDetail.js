@@ -62,7 +62,7 @@ const RecipeDetail = () => {
   const [getdata, setGetdata] = useState(false);
   const [tapmenu, setTapmenu] = useState(true);
   let { id } = useParams();
-  let replaced_id = id.replace(" ", "_");
+  let replaced_id = id.replaceAll(" ", "_");
 
   // cosr 막히면 https://cors-anywhere.herokuapp.com/ 추가
   const getData = async () => {
@@ -71,7 +71,6 @@ const RecipeDetail = () => {
     );
     setDatas(response.data.COOKRCP01.row[0]);
     setGetdata(true);
-    console.log(datas);
   };
 
   useEffect(() => {

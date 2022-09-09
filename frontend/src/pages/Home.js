@@ -5,7 +5,6 @@ import Search from "../components/Home/Search";
 import Recipe from "../components/Home/Recipe";
 import { Link } from "react-router-dom";
 
-
 const HomeStyle = styled.div`
   max-width: 1000px;
   width: 100%;
@@ -48,6 +47,7 @@ const Home = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(datas);
     getData();
   };
 
@@ -65,14 +65,20 @@ const Home = () => {
       />
 
       <div className="search_container">
-        {datas?.map((data) => (
-          <div key={data.RCP_SEQ}>
-            <Link to={`/${data.RCP_NM}`}>
-              <img src={data.ATT_FILE_NO_MK} alt="" />
-              <div>{data.RCP_NM}</div>
-            </Link>
-          </div>
-        ))}
+        {datas === undefined ? (
+          <div>검색 결과가 없습니다</div>
+        ) : (
+          <>
+            {datas?.map((data) => (
+              <div key={data.RCP_SEQ}>
+                <Link to={`/${data.RCP_NM}`}>
+                  <img src={data.ATT_FILE_NO_MK} alt="" />
+                  <div>{data.RCP_NM}</div>
+                </Link>
+              </div>
+            ))}
+          </>
+        )}
       </div>
 
       <Recipe

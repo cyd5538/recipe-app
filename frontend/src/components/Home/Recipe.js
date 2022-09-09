@@ -3,7 +3,7 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import Spinner from '../../style/Spinner'
+import Spinner from "../../style/Spinner";
 
 const RecipeStyle = styled.div`
   margin-top: 50px;
@@ -15,6 +15,7 @@ const RecipeStyle = styled.div`
     min-height: 40rem;
     min-width: 33%;
     padding: 10px;
+    position: relative;
   }
 
   .item img {
@@ -38,6 +39,13 @@ const RecipeStyle = styled.div`
   .center {
     margin-top: 5px;
     text-align: center;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: all 0.3s ease-in;
+  }
+  .center:hover{
+    transform: scale(1.2);
+    color: blue;
   }
 `;
 
@@ -53,17 +61,21 @@ const Recipe = ({ rcpname, title, ImgWidth, ImgHeight, MinWidth }) => {
       `/${process.env.REACT_APP_SERVICE_KEY}/COOKRCP01/json/1/10/RCP_NM=${rcpname}`
     );
     setDatas(response.data.COOKRCP01.row);
-    setDataget(true)
+    setDataget(true);
     console.log(datas);
   };
+
   useEffect(() => {
     getData();
-    setWidth(carousel.current.scrollWidth - carousel.current.offsetWidth);
   }, []);
+
+  useEffect(() => {
+    setWidth(carousel.current.scrollWidth - carousel.current.offsetWidth);
+  }, [datas]);
 
   return (
     <RecipeStyle>
-      {dataget ? <h2>{title}</h2>: <Spinner />}
+      {dataget ? <h2>{title}</h2> : <Spinner />}
       <motion.div
         ref={carousel}
         className="carousel"
@@ -81,12 +93,13 @@ const Recipe = ({ rcpname, title, ImgWidth, ImgHeight, MinWidth }) => {
                 style={{ minWidth: `${MinWidth}` }}
                 key={data.RCP_SEQ}
               >
-                <img
-                  src={data.ATT_FILE_NO_MAIN}
-                  alt={data.RCP_NM}
-                  style={{ width: `${ImgWidth}`, height: `${ImgHeight}` }}
-                />
                 <Link to={`/${data.RCP_NM}`}>
+                  <img
+                    src={data.ATT_FILE_NO_MAIN}
+                    alt={data.RCP_NM}
+                    style={{ width: `${ImgWidth}`, height: `${ImgHeight}` }}
+                  />
+
                   <div className="center">{data.RCP_NM}</div>
                 </Link>
               </motion.div>
