@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react'
-import { FaSignInAlt } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { login, reset } from '../feautures/auth/authSlice'
+import { FaUser } from 'react-icons/fa'
 import Spinner from '../style/Spinner'
+import { register, reset } from '../feautures/auth/authSlice'
 import styled from 'styled-components'
 
-const LoginStyled = styled.div`
- max-width: 1000px;
+const RegisterStyle = styled.div`
+  max-width: 1000px;
   width: 100%;
   margin: auto;
 
@@ -47,13 +47,15 @@ const LoginStyled = styled.div`
   }
 `
 
-function Login() {
+function Register() {
   const [formData, setFormData] = useState({
+    name: '',
     email: '',
     password: '',
+    password2: '',
   })
 
-  const { email, password } = formData
+  const { name, email, password, password2 } = formData
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -68,15 +70,15 @@ function Login() {
     }
 
     if (isSuccess || user) {
-      navigate('/')
+      navigate('/login')
     }
 
     dispatch(reset())
   }, [user, isError, isSuccess, message, navigate, dispatch])
 
   const onChange = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
+    setFormData((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
     }))
   }
@@ -84,12 +86,17 @@ function Login() {
   const onSubmit = (e) => {
     e.preventDefault()
 
-    const userData = {
-      email,
-      password,
-    }
+    if (password !== password2) {
+      toast.error('비밀번호가 일치하지 않습니다.')
+    } else {
+      const userData = {
+        name,
+        email,
+        password,
+      }
 
-    dispatch(login(userData))
+      dispatch(register(userData))
+    }
   }
 
   if (isLoading) {
@@ -97,15 +104,25 @@ function Login() {
   }
 
   return (
-    <LoginStyled>
+    <RegisterStyle>
       <section className='heading'>
         <h1>
-          <FaSignInAlt /> Login
+          <FaUser /> 회원가입
         </h1>
       </section>
 
       <section className='form'>
         <form onSubmit={onSubmit}>
+          <div>
+            <input
+              type='text'
+              id='name'
+              name='name'
+              value={name}
+              placeholder='이름'
+              onChange={onChange}
+            />
+          </div>
           <div>
             <input
               type='email'
@@ -126,16 +143,25 @@ function Login() {
               onChange={onChange}
             />
           </div>
-
           <div>
+            <input
+              type='password'
+              id='password2'
+              name='password2'
+              value={password2}
+              placeholder='비밀번호 확인'
+              onChange={onChange}
+            />
+          </div>
+          <div className='form-group'>
             <button type='submit' className='btn'>
               Submit
             </button>
           </div>
         </form>
       </section>
-    </LoginStyled>
+    </RegisterStyle>
   )
 }
 
-export default Login
+export default Register

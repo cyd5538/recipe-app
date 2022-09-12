@@ -1,8 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";    
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { AiFillHeart } from "react-icons/ai";
-import { FiUserPlus, FiLogIn } from "react-icons/fi";
+import { FaSignInAlt, FaSignOutAlt, FaUser } from "react-icons/fa";
+import { logout, reset } from "../feautures/auth/authSlice";
 
 const NavStyle = styled.div`
   width: 100%;
@@ -29,24 +31,37 @@ const NavStyle = styled.div`
     align-items: center;
     justify-content: center;
     gap: 1.3rem;
-    font-size: 1.5rem;
-    font-weight: bold;
-    div{
-        a{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
-        span:last-child{
-            font-size: 0.7rem;
-            color:black;
-        }
+    font-size: 1.1rem;
+    div {
+      a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+      }
+      span:last-child {
+        font-size: 0.7rem;
+        color: black;
+      }
     }
+  }
+  .btn{
+    border: none;
+    font-size: 1.1rem;
+    background-color: #fff;
+    cursor: pointer;
   }
 `;
 
 const Nav = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const onLogout = () => {
+    dispatch(logout());
+    dispatch(reset());
+    navigate("/");
+  };
   return (
     <NavStyle>
       <div>
@@ -55,21 +70,21 @@ const Nav = () => {
         </Link>
       </div>
       <div className="icon">
-        <div>
-          <AiFillHeart />
-        </div>
-        <div>
+        {user ? (
+          <button className="btn" onClick={onLogout}>
+            <FaSignOutAlt /> Logout
+          </button>
+        ) : (
+          <>
             <Link to="/login">
-                <span><FiLogIn /></span>
-                <span>로그인</span>
+              <FaSignInAlt /> Login
             </Link>
-        </div>
-        <div>
+
             <Link to="/sign">
-                <span><FiUserPlus /></span>
-                <span>회원가입</span>
+              <FaUser /> Register
             </Link>
-        </div>
+          </>
+        )}
       </div>
     </NavStyle>
   );

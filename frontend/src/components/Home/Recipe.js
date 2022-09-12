@@ -49,20 +49,25 @@ const RecipeStyle = styled.div`
   }
 `;
 
-const Recipe = ({ rcpname, title, ImgWidth, ImgHeight, MinWidth }) => {
+const Recipe = ({API, title, ImgWidth, ImgHeight, MinWidth }) => {
   const [datas, setDatas] = useState([]);
   const [dataget, setDataget] = useState(false);
   const [width, setWidth] = useState(0);
   const carousel = useRef();
 
+  
   // cosr 막히면 https://cors-anywhere.herokuapp.com/ 추가
   const getData = async () => {
-    const response = await axios.get(
-      `/${process.env.REACT_APP_SERVICE_KEY}/COOKRCP01/json/1/10/RCP_NM=${rcpname}`
-    );
-    setDatas(response.data.COOKRCP01.row);
-    setDataget(true);
-    console.log(datas);
+    try {
+      const response = await axios.get(API);
+      setDatas(response.data.COOKRCP01.row);
+      setDataget(true);
+      console.log(datas)
+
+    } catch (error) {
+      console.log(error)
+    }
+
   };
 
   useEffect(() => {

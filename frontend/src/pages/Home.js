@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import Search from "../components/Home/Search";
 import Recipe from "../components/Home/Recipe";
+
 import { Link } from "react-router-dom";
+import requests from "../RecipeAPI/Api";
 
 const HomeStyle = styled.div`
   max-width: 1000px;
@@ -47,13 +49,14 @@ const Home = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(datas);
     getData();
   };
 
   const searchTag = async (tag) => {
     setSearchdata(tag);
   };
+
+  useEffect(() => {}, [requests]);
 
   return (
     <HomeStyle>
@@ -82,19 +85,14 @@ const Home = () => {
       </div>
 
       <Recipe
-        title="김치로 만든 요리"
-        rcpname="김치"
+        title="면이 먹고싶을 떄"
         ImgWidth="100%"
         ImgHeight="50%"
         MinWidth="33%"
+        API={requests.requestNoodle}
       />
-      <Recipe
-        title="면요리"
-        rcpname="면"
-        ImgWidth="100%"
-        ImgHeight="60%"
-        MinWidth="50%"
-      />
+
+
     </HomeStyle>
   );
 };
