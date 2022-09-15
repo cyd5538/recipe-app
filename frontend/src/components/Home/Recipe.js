@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Spinner from "../../style/Spinner";
+import { useQuery } from "react-query";
+import axios from "axios";
 
 const RecipeStyle = styled.div`
   margin-top: 50px;
@@ -49,38 +50,31 @@ const RecipeStyle = styled.div`
   }
 `;
 
-const Recipe = ({API, title, ImgWidth, ImgHeight, MinWidth }) => {
-  const [datas, setDatas] = useState([]);
+const Recipe = ({name, title, ImgWidth, ImgHeight, MinWidth }) => {
   const [dataget, setDataget] = useState(false);
   const [width, setWidth] = useState(0);
   const carousel = useRef();
-
   
-  // cosr 막히면 https://cors-anywhere.herokuapp.com/ 추가
-  const getData = async () => {
-    try {
-      const response = await axios.get(API);
-      setDatas(response.data.COOKRCP01.row);
-      setDataget(true);
-      console.log(datas)
+  const fetchCharacter = async ({ queryKey }) => {
+    const response = await axios(
+        `/${process.env.REACT_APP_SERVICE_KEY}/COOKRCP01/json/1/10/RCP_NM=${queryKey[1]}`
+      );
+      setDataget(true)
+      return response.data.COOKRCP01.row
+    };
 
-    } catch (error) {
-      console.log(error)
-    }
+    const { data, status } = useQuery(["characters", name], fetchCharacter, {
+      keepPreviousData: true,
+    });
 
-  };
+    useEffect(() => {
+      setWidth(carousel.current.scrollWidth - carousel.current.offsetWidth);
+    }, [data]);
 
-  useEffect(() => {
-    getData();
-  }, []);
-
-  useEffect(() => {
-    setWidth(carousel.current.scrollWidth - carousel.current.offsetWidth);
-  }, [datas]);
 
   return (
     <RecipeStyle>
-      {dataget ? <h2>{title}</h2> : <Spinner />}
+      {dataget ? <h2>{title}</h2> : <Spinner /> }
       <motion.div
         ref={carousel}
         className="carousel"
@@ -91,21 +85,21 @@ const Recipe = ({API, title, ImgWidth, ImgHeight, MinWidth }) => {
           dragConstraints={{ right: 0, left: -width }}
           className="inner-carousel"
         >
-          {datas?.map((data) => {
+          {data?.map((recipe) => {
             return (
               <motion.div
                 className="item"
                 style={{ minWidth: `${MinWidth}` }}
-                key={data.RCP_SEQ}
+                key={recipe.RCP_SEQ}
               >
-                <Link to={`/${data.RCP_NM}`}>
+                <Link to={`/${recipe.RCP_NM}`}>
                   <img
-                    src={data.ATT_FILE_NO_MAIN}
-                    alt={data.RCP_NM}
+                    src={recipe.ATT_FILE_NO_MAIN}
+                    alt={recipe.RCP_NM}
                     style={{ width: `${ImgWidth}`, height: `${ImgHeight}` }}
                   />
 
-                  <div className="center">{data.RCP_NM}</div>
+                  <div className="center">{recipe.RCP_NM}</div>
                 </Link>
               </motion.div>
             );

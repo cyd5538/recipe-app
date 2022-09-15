@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { FaSignInAlt, FaUser } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
-import { AiFillHeart } from "react-icons/ai";
-import { FaSignInAlt, FaSignOutAlt, FaUser } from "react-icons/fa";
 import { logout, reset } from "../feautures/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const NavStyle = styled.div`
   width: 100%;
@@ -45,23 +45,31 @@ const NavStyle = styled.div`
       }
     }
   }
-  .btn{
+  .btn {
     border: none;
     font-size: 1.1rem;
     background-color: #fff;
     cursor: pointer;
   }
+
+  .toggle_container {
+    position: relative;
+  }
+
+
 `;
 
 const Nav = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+
   const onLogout = () => {
     dispatch(logout());
     dispatch(reset());
     navigate("/");
   };
+
   return (
     <NavStyle>
       <div>
@@ -71,15 +79,14 @@ const Nav = () => {
       </div>
       <div className="icon">
         {user ? (
-          <button className="btn" onClick={onLogout}>
-            <FaSignOutAlt /> Logout
-          </button>
+          <div className="btn" onClick={onLogout}>
+            로그아웃
+          </div>
         ) : (
           <>
             <Link to="/login">
               <FaSignInAlt /> Login
             </Link>
-
             <Link to="/sign">
               <FaUser /> Register
             </Link>

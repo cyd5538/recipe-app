@@ -8,19 +8,26 @@ import Nav from "./components/Nav";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Register from "./pages/Register";
+import Tendinous from "./pages/Tendinous";
+import { QueryClientProvider, QueryClient } from "react-query";
 
 const App = () => {
+  const queryClient = new QueryClient();
+
   return (
     <div>
       <ToastContainer/>
         <GlobalStyle />
         <Nav />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/:id" element={<RecipeDetail />} />
-          <Route path="/sign" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
+        <QueryClientProvider client={queryClient}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/:id" element={<RecipeDetail />} />
+            <Route path="/sign" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/tendinous" element={<Tendinous />} />
+          </Routes>
+        </QueryClientProvider>
     </div>
   );
 };

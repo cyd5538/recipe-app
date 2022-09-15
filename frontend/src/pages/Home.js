@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import Search from "../components/Home/Search";
 import Recipe from "../components/Home/Recipe";
-
 import { Link } from "react-router-dom";
-import requests from "../RecipeAPI/Api";
 
 const HomeStyle = styled.div`
   max-width: 1000px;
@@ -56,8 +54,6 @@ const Home = () => {
     setSearchdata(tag);
   };
 
-  useEffect(() => {}, [requests]);
-
   return (
     <HomeStyle>
       <Search
@@ -85,11 +81,25 @@ const Home = () => {
       </div>
 
       <Recipe
-        title="면이 먹고싶을 떄"
+        title="밥이 먹고싶을 떄"
         ImgWidth="100%"
         ImgHeight="50%"
         MinWidth="33%"
-        API={requests.requestNoodle}
+        name="밥"
+      />
+      <Recipe
+        title="면이 먹고싶을 떄"
+        ImgWidth="100%"
+        ImgHeight="60%"
+        MinWidth="50%"
+        name="면"
+      />
+      <Recipe
+        title="비 오는 날 추천메뉴"
+        ImgWidth="100%"
+        ImgHeight="40%"
+        MinWidth="25%"
+        name="전"
       />
 
 
