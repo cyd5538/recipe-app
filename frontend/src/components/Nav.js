@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { FaSignInAlt, FaUser } from "react-icons/fa";
+import { AiFillHeart } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import { logout, reset } from "../feautures/auth/authSlice";
 import { useNavigate } from "react-router-dom";
@@ -79,9 +80,14 @@ const Nav = () => {
       </div>
       <div className="icon">
         {user ? (
+          <>
+          <div>
+            <Link to="/like"><AiFillHeart /></Link>
+          </div>
           <div className="btn" onClick={onLogout}>
             로그아웃
           </div>
+          </>
         ) : (
           <>
             <Link to="/login">

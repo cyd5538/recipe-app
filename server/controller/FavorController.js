@@ -1,41 +1,61 @@
-const asyncHandler = require("express-async-handler");
-
-const Favor = require("../models/FavorModel");
 const User = require("../models/userModel");
 
-const getFavor = asyncHandler(async (req, res) => {
-  const Favors = await Favor.find({ user: req.user.id });
-  res.status(200).json(Favors);
-});
-
-const deleteFavor = asyncHandler(async (req, res) => {
-
-  const favor = await Favor.findById(req.params.id);
-  if (!favor) {
-    res.status(400);
-    throw new Error("not found");
+module.exports.getLikedRecipes = async (req, res) => {
+  try {
+    const { email } = req.params;
+    const user = await await User.findOne({ email });
+    if (user) {
+      return res.json({ msg: "success", movies: user.likedMovies });
+    } else return res.json({ msg: "User with given email not found." });
+  } catch (error) {
+    return res.json({ msg: "Error fetching Recipes." });
   }
+};
 
-  const user = await User.findById(req.user.id)
-
-  // 유저가 있는지 확인
-  if(!user){
-    res.status(401)
-    throw new Error('User가 없습니다')
+module.exports.addToLikedRecipe = async (req, res) => {
+  try {
+    const { email, data } = req.body;
+    const user = await await User.findOne({ email });
+    if (user) {
+      const { likedMovies } = user;
+      const movieAlreadyLiked = likedMovies.find(({ id }) => id === data.id);
+      if (!movieAlreadyLiked) {
+        await User.findByIdAndUpdate(
+          user._id,
+          {
+            likedMovies: [...user.likedMovies, data],
+          },
+          { new: true }
+        );
+      } else return res.json({ msg: "Movie already added to the liked list." });
+    } else await User.create({ email, likedMovies: [data] });
+    return res.json({ msg: "Movie successfully added to liked list." });
+  } catch (error) {
+    return res.json({ msg: "Error adding movie to the liked list" });
   }
+};
 
-  // 로그인한 유저와 맞는지 확인
-  if(favor.user.toString() !== user.id){
-    res.status(401)
-    throw new Error("인증되지 않은 유저입니다.")
+module.exports.removeFromLikedRecipe = async (req, res) => {
+  try {
+    const { email, movieId } = req.body;
+    const user = await User.findOne({ email });
+    if (user) {
+      const movies = user.likedMovies;
+      const movieIndex = movies.findIndex(({ id }) => id === movieId);
+      if (!movieIndex) {
+        res.status(400).send({ msg: "Movie not found." });
+      }
+      movies.splice(movieIndex, 1);
+      await User.findByIdAndUpdate(
+        user._id,
+        {
+          likedMovies: movies,
+        },
+        { new: true }
+      );
+      return res.json({ msg: "Movie successfully removed.", movies });
+    } else return res.json({ msg: "User with given email not found." });
+  } catch (error) {
+    return res.json({ msg: "Error removing movie to the liked list" });
   }
-
-  await Favor.remove()
-
-  res.status(200).json({ id: req.params.id });
-});
-
-module.exports = {
-  deleteFavor,
-  getFavor,
 };

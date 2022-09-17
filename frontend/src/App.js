@@ -8,7 +8,7 @@ import Nav from "./components/Nav";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Register from "./pages/Register";
-import Tendinous from "./pages/Tendinous";
+import Like from "./pages/Like";
 import { QueryClientProvider, QueryClient } from "react-query";
 
 const App = () => {
@@ -25,7 +25,7 @@ const App = () => {
             <Route path="/:id" element={<RecipeDetail />} />
             <Route path="/sign" element={<Register />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/tendinous" element={<Tendinous />} />
+            <Route path="/like" element={<Like />} />
           </Routes>
         </QueryClientProvider>
     </div>
