@@ -1,15 +1,15 @@
-const express = require("express");
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 const {
-  getLikedRecipes,
-  addToLikedRecipe,
-  removeFromLikedRecipe
-} = require("../controller/FavorController");
+   addFavor,
+   DeleteFavor,
+   AllFavors,
+   getFavors
+  } = require('../controller/FavorController')
 
-const { protect } = require("../middlewear/authMiddlewear");
+const { protect } = require('../middlewear/authMiddlewear')
 
-router.route("/liked/:email").get(protect, getLikedRecipes)
-router.route("/add").post(protect, addToLikedRecipe);
-router.route("/delete").put(protect, removeFromLikedRecipe);
+router.route('/').post(protect, addFavor).get(protect,getFavors)
+router.route('/:id').delete(protect, DeleteFavor).get(protect,AllFavors)
 
-module.exports = router;
+module.exports = router
