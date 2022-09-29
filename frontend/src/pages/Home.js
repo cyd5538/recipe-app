@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import Search from "../components/Home/Search";
 import Recipe from "../components/Home/Recipe";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 const HomeStyle = styled.div`
   max-width: 1000px;
   width: 100%;
@@ -33,7 +33,8 @@ const HomeStyle = styled.div`
 const Home = () => {
   const [searchdata, setSearchdata] = useState("");
   const [datas, setDatas] = useState([]);
-
+  const { user } = useSelector((state) => state.auth);
+  const navigate = useNavigate()
   const getData = async () => {
     try {
       const response = await axios.get(
@@ -53,6 +54,13 @@ const Home = () => {
   const searchTag = async (tag) => {
     setSearchdata(tag);
   };
+
+  useEffect(() => {
+    if(!user){
+      navigate("/login")
+    }
+  }, [])
+  
 
   return (
     <HomeStyle>

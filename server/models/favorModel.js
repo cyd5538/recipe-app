@@ -1,12 +1,8 @@
 const mongoose = require('mongoose');
 
 const favorSchema = mongoose.Schema({
-     title: {
+      title: {
         type: String,
-
-      },
-      price: {
-        type: Number,
 
       },
       image: {

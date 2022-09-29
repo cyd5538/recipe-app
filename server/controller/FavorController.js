@@ -16,8 +16,6 @@ const addFavor = asyncHandler(async (req, res) => {
   
   const favors = await Favor.create({
     title: req.body.title,
-    price: req.body.price,
-    id: req.params.id,
     image: req.body.image,
     url: req.body.url,
     user: req.user.id,
