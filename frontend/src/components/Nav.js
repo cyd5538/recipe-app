@@ -44,7 +44,7 @@ const Nav = () => {
   }
 
   useEffect(() => {
-      getFavor()
+    getFavor()
   },[favor])
 
   return (

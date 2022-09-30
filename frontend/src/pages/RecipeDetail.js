@@ -4,6 +4,7 @@ import axios from "axios";
 import styled from "styled-components";
 import Spinner from "../style/Spinner";
 import { toast } from 'react-toastify';
+import { FcLike, FcDislike } from "react-icons/fc";
 
 const RecipeDetail = () => {
   const [datas, setDatas] = useState([]);
@@ -115,12 +116,12 @@ const RecipeDetail = () => {
             <div className="container_img">
               <img src={datas.ATT_FILE_NO_MK} alt="" />
             </div>
-
+            
             <div className="container_text">
               <div className="titlelike">
                 <div className="title">{datas.RCP_NM}</div>
-                {IsFavor ? <div onClick={() => favorClick()} className="like">추가</div>
-                : <div onClick={() => favorNotClick()} className="like">삭제</div>}
+                {IsFavor ? <div onClick={() => favorClick()} className="like"><FcLike /></div>
+                : <div onClick={() => favorNotClick()} className="like"><FcDislike/></div>}
               </div>
               <div className="choice">
                 <div onClick={() => setTapmenu(true)}>재료</div>
@@ -174,7 +175,7 @@ const RecipeDetailStyled = styled.div`
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
+
 
     .container_img {
       flex: 1;
@@ -184,6 +185,8 @@ const RecipeDetailStyled = styled.div`
       margin-bottom: 30px;
       img {
         max-width: 450px;
+        max-height: 400px;
+        height: 100%;
         width: 100%;
       }
     }
@@ -204,13 +207,13 @@ const RecipeDetailStyled = styled.div`
       }
 
       .like{
-        font-size: 2rem;
+        font-size: 1.5rem;
         color: red;
         cursor: pointer;
       }
 
       .title {
-        font-size: 2rem;
+        font-size: 1.5rem;
         font-weight: bold;
       }
     }

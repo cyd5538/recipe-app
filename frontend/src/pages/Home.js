@@ -89,11 +89,11 @@ const Home = () => {
       </div>
 
       <Recipe
-        title="밥이 먹고싶을 떄"
+        title="손님을 대접해야 한다면?"
         ImgWidth="100%"
         ImgHeight="50%"
         MinWidth="33%"
-        name="밥"
+        name="갈비"
       />
       <Recipe
         title="면이 먹고싶을 떄"

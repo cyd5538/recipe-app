@@ -33,9 +33,9 @@ const Like = () => {
   return(
     <LikeStyle>
       <h2>나의 좋아요 목록</h2>
-      <div className='card'>
+      <div className='card_container'>
         {favor?.map((data) => (
-          <div>
+          <div className='card'>
             <Link to={`/${data.url}`}>
               <img src={data.image} alt={data.title} />
               <div>{data.title}</div>
@@ -58,22 +58,37 @@ const LikeStyle = styled.div`
     text-align: center;
   }
 
-  .card{
+  .card_container{
     margin-top: 50px;
     display: flex; 
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     gap: 1rem;
-    div{
+    .card{
       display: flex;
+      width: 250px;
+      height: 300px;
+      gap: 1rem;
       justify-content: center;
       gap: 1rem;
+      padding : 5px;
+      transition: all 0.3s;
+      div{
+        text-align: center;
+      }
     }
+    .card:hover{
+      border: 2px solid #f3bcf3;
+    }
+
   }
 
   img{
-    max-width: 200px;
+    max-width: 250px;
     width: 100%;
+    max-height: 250px;
+    height: 100%;
+    object-fit: cover;
   }
 `
